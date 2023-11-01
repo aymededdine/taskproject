@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Task List</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+		integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<style>
+		
+		
+		.hover-effect:hover {
+			background-color: rgb(128, 255, 255);
+			cursor: pointer;
+		}
+
+		.floating-form {
+			display: none;
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			z-index: 100;
+			background-color: rgba(255, 255, 255, 0.9);
+			/* Semi-transparent background */
+			padding: 20px;
+			border: 1px solid #ccc;
+			box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+			/* Add shadow */
+			border-radius: 5px;
+			max-width: 400px;
+			/* Limit the form width */
+		}
+
+		.floating-form label {
+			font-weight: bold;
+		}
+
+		.floating-form input,
+		.floating-form select {
+			width: 100%;
+			padding: 10px;
+			margin: 5px 0;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+		}
+
+		.floating-form button {
+			width: 100%;
+			padding: 10px;
+			background-color: #007bff;
+			color: white;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+
+		.floating-form button:hover {
+			background-color: #0056b3;
+		}
+
+		.dark-overlay {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.7);
+			/* Semi-transparent black overlay */
+			z-index: 99;
+			/* Place the overlay behind the edit form */
+		}
+
+		/* Blurred content when the form is open */
+		.blurred-content {
+			filter: blur(5px);
+			/* Adjust the blur intensity as needed */
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<div th:replace="header :: header"></div>
+
+	<div class="container">
+
+		<div class="container mt-4">
+			<h1 class="display-3">Task List</h1>
+			<table class="table table-bordered table-striped">
+				<thead class="thead-dark">
+					<tr>
+						<th>Name</th>
+						<th>Priority</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr id="testid" class="hover-effect" th:each="task : ${tasks}" th:onclick="getRowValues([[${task.id}]], [[${task.name}]],
+					  [[${task.priority.id}]], [[${task.status.id}]] )">
+						<td th:text="${task.name}"></td>
+						<td th:text="${task.priority.priority}"></td>
+						<td th:text="${task.status.status}"></td>
+						<td>
+							<button class="clickable-row" th:onclick="deleteTask([[${task.id}]])">Delete</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<a class="btn btn-secondary" th:href="@{/tasks/task-form}">Add Task</a>
+		</div>
+	</div>
+
+	<div id="editForm" class="floating-form" style="display: none;">
+		<form th:object="${task}" th:action="@{/tasks/update}" method="POST" style="display: grid; grid-gap: 10px;">
+
+			<input type="text" id="taskId" th:field="*{id}" required class="form-control" style="display: none;" />
+
+			<div class="form-group">
+				<label for="name">Name:</label>
+				<input type="text" id="taskName" th:field="*{name}" required class="form-control" />
+			</div>
+			<div class="form-group">
+				<label for="priority">Priority:</label>
+				<select id="taskPriority" th:field="*{priority.id}" required class="form-control">
+					<option value="">Select Priority</option>
+					<option value="3">Low</option>
+					<option value="2">Medium</option>
+					<option value="1">High</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="status">Status:</label>
+				<select id="taskStatus" th:field="*{status.id}" required class="form-control">
+					<option value="" disabled>Select Status</option>
+					<option value="1">To Do</option>
+					<option value="2">Done</option>
+				</select>
+			</div>
+
+			<div style="grid-column: span 2;">
+				<button type="submit" class="btn btn-primary" style="width: 50%;">Save Task</button>
+			</div>
+			<div style="grid-column: span 2;">
+				<a th:onclick="closeForm()" class="btn btn-secondary" style="width: 50%;">Cancel</a>
+			</div>
+		</form>
+	</div>
+
+	<div id="overlay" class="dark-overlay"></div>
+
+
+	<script th:inline="javascript">
+
+		var colorMap = {
+			"red": {background: "red", color: "white"},
+			"yellow": {background: "yellow", color: "black"},
+			"green": {background: "green", color: "white"}
+		};
+
+		function getRowValues(id, name, priority, status) {
+			document.getElementById('taskId').value = id;
+			document.getElementById('taskName').value = name;
+			document.getElementById('taskStatus').value = status;
+			document.getElementById('taskPriority').value = priority;
+
+			document.getElementById('editForm').style.display = 'block';
+			document.getElementById('overlay').style.display = 'block';
+
+
+			editForm.scrollIntoView({behavior: 'smooth'});
+		}
+
+		function closeForm() {
+			document.getElementById('editForm').style.display = 'none';
+			document.getElementById('overlay').style.display = 'none';
+		}
+
+		function deleteTask(taskId) {
+
+
+			fetch(`/tasks/delete/${taskId}`, {
+				method: 'DELETE',
+			})
+				.then(response => {
+					if (response.ok) {
+						document.getElementById('testid').remove();
+					} else {
+						// Handle the error (e.g., show an error message)
+					}
+				})
+				.catch(error => {
+					console.error('Error:', error);
+				});
+
+			event.stopPropagation();
+		}
+
+
+	</script>
+
+	<!--		<div th:replace="footer :: footer"></div>
+-->
+
+</body>
+
+</html>

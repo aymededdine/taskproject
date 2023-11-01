@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Task List</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+		integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<style>
+
+		h3 {
+			color: black;
+		}
+	</style>
+</head>
+
+<body>
+	<div th:replace="header :: header"></div>
+
+
+	<!-- Main Content -->
+	<main class="container">
+		<!-- Introduction Section -->
+		<section class="my-5">
+			<h1>Welcome to Task Manager</h1>
+			<h5 style="color:rgb(128, 128, 128);">Organize your tasks effectively</h5>
+		</section>
+
+		<!-- Task Categories Section -->
+		<section class="my-5">
+			<h2>Choose a Task Category:</h2>
+			<div class="row">
+
+				<!-- Weekly Task Managing Card -->
+				<div class="col-md-6">
+					<div class="card h-100">
+						<div class="card-body d-flex flex-column justify-content-between">
+							<h3>Weekly Task Managing</h3>
+							<h6 style="color:rgb(0, 64, 128);">Plan your long-term goals</h6>
+							<a th:href="@{/weekly-tasks/create}" class="btn btn-primary mt-3">Get Started</a>
+						</div>
+					</div>
+				</div>
+				<!-- Normal Task Managing Card -->
+				<div class="col-md-6">
+					<div class="card h-100">
+						<div class="card-body d-flex flex-column justify-content-between">
+							<h3>Normal Task Managing</h3>
+							<h6 style="color:rgb(0, 64, 128);">Manage your day-to-day tasks</h6>
+							<a th:href="@{/tasks}" class="btn btn-primary mt-3">Get Started</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<!-- Footer Section -->
+	<footer class="my-5">
+		<div class="container text-center">
+			<p>&copy; 2023 Task Manager</p>
+		</div>
+	</footer>
+
+	<!-- External JavaScript Libraries -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

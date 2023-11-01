@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Task List</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+		integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<style>
+		.task-item {
+			background-color: #fff;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			padding: 10px;
+			margin: 10px 0;
+		}
+
+		.add-task-button {
+			margin-top: 10px;
+		}
+
+		.days-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+			gap: 40px;
+		}
+
+		.day-card {
+			background-color: #fff;
+			border: 2px solid rgb(42, 42, 42);
+			border-radius: 10px;
+			padding: 20px;
+			text-align: center;
+		}
+
+		.task-item button {
+			background-color: rgb(255, 0, 0);
+			color: #fff;
+			border: none;
+			padding: 4px 4px;
+			border-radius: 50%;
+			/* Make the button rounded */
+			cursor: pointer;
+			transition: background-color 0.3s;
+			font-size: 12px;
+		}
+
+		.task-item button:hover {
+			background-color: rgb(255, 128, 128);
+		}
+	</style>
+</head>
+
+<body>
+	<div th:replace="header :: header"></div>
+
+	<form id="selectDays" class="container mt-4">
+		<fieldset>
+			<legend>Please add tasks to the days you'd like to schedule, avoiding your busy or break days</legend>
+			<div class="days-grid">
+				<!-- Monday -->
+				<div class="day-card">
+					<label class="form-check-label" for="monday">Monday</label>
+					<div id="MONDAYTasks" class="mt-2"></div>
+					<button type="button" class="btn btn-success add-task-button" onclick="addTask('MONDAY')">Add
+						Task</button>
+				</div>
+
+				<!-- Tuesday -->
+				<div class="day-card">
+					<label class="form-check-label" for="tuesday">Tuesday</label>
+					<div id="TUESDAYTasks" class="mt-2"></div>
+					<button type="button" class="btn btn-success add-task-button" onclick="addTask('TUESDAY')">Add
+						Task</button>
+				</div>
+
+				<!-- Wednesday -->
+				<div class="day-card">
+					<label class="form-check-label" for="wednesday">Wednesday</label>
+					<div id="WEDNESDAYTasks" class="mt-2"></div>
+					<button type="button" class="btn btn-success add-task-button" onclick="addTask('WEDNESDAY')">Add
+						Task</button>
+				</div>
+
+				<!-- Thursday -->
+				<div class="day-card">
+					<label class="form-check-label" for="thursday">Thursday</label>
+					<div id="THURSDAYTasks" class="mt-2"></div>
+					<button type="button" class="btn btn-success add-task-button" onclick="addTask('THURSDAY')">Add
+						Task</button>
+				</div>
+
+				<!-- Friday -->
+				<div class="day-card">
+					<label class="form-check-label" for="friday">Friday</label>
+					<div id="FRIDAYTasks" class="mt-2"></div>
+					<button type="button" class="btn btn-success add-task-button" onclick="addTask('FRIDAY')">Add
+						Task</button>
+				</div>
+
+				<!-- Saturday -->
+				<div class="day-card">
+					<label class="form-check-label" for="saturday">Saturday</label>
+					<div id="SATURDAYTasks" class="mt-2"></div>
+					<button type="button" class="btn btn-success add-task-button" onclick="addTask('SATURDAY')">Add
+						Task</button>
+				</div>
+
+				<!-- Sunday -->
+				<div class="day-card">
+					<label class="form-check-label" for="sunday">Sunday</label>
+					<div id="SUNDAYTasks" class="mt-2"></div>
+					<button type="button" class="btn btn-success add-task-button" onclick="addTask('SUNDAY')">Add
+						Task</button>
+				</div>
+			</div>
+		</fieldset>
+		<br />
+		<button type="button" class="btn btn-primary" th:onclick="saveTasks()">Submit</button>
+	</form>
+
+	<script>
+		// Create an object to store tasks for each day
+		var tasksByDay = {
+			MONDAY: [],
+			TUESDAY: [],
+			WEDNESDAY: [],
+			THURSDAY: [],
+			FRIDAY: [],
+			SATURDAY: [],
+			SUNDAY: [],
+		};
+
+		function addTask(day) {
+			var taskName = prompt("Enter your task name:");
+
+			if (taskName) {
+				//var checkbox = document.getElementById(day);
+				//checkbox.checked = true;
+				if (!tasksByDay[day].includes(taskName)) {
+					tasksByDay[day].push(taskName);
+				} else {
+					alert("Task already exists");
+				}
+			}
+
+			var dayTasksElement = document.getElementById(day + "Tasks");
+			dayTasksElement.innerHTML = "";
+
+			for (const task of tasksByDay[day]) {
+				let content = `
+          			 <div class="task-item" style="display: flex; justify-content: space-between; align-items: center;">
+    					<span>${task}</span>
+    					<button onclick="deleteTask('${day}', '${task}')">Delete</button>
+					</div>
+
+        `;
+				dayTasksElement.innerHTML += content;
+			}
+
+			attachDeleteButtonListeners(day);
+
+		}
+
+
+		function deleteTask(day, taskName) {
+			tasksByDay[day] = tasksByDay[day].filter(task => task !== taskName);
+			updateTaskList(day);
+		}
+
+		function updateTaskList(day) {
+			var dayTasksElement = document.getElementById(day + "Tasks");
+			dayTasksElement.innerHTML = "";
+
+			for (const task of tasksByDay[day]) {
+				let content = `
+                    <div class="task-item">
+                        <span>${task}</span>
+                        <button onclick="deleteTask('${day}', '${task.id}')">Delete</button>
+                    </div>
+                `;
+				dayTasksElement.innerHTML += content;
+			}
+
+			attachDeleteButtonListeners(day);
+
+		}
+
+		function attachDeleteButtonListeners(day) {
+			var deleteButtons = document.querySelectorAll(`#${day}Tasks button`);
+			deleteButtons.forEach(button => {
+				button.addEventListener("click", function () {
+					var taskName = this.parentNode.querySelector("span").textContent;
+					deleteTask(day, taskName);
+				});
+			});
+		}
+
+
+		function saveTasks() {
+
+			var result = window.confirm("Make sure that you are certain to complete these tasks. Every task you write will be recorded in the statistics and cannot be deleted");
+
+			if (result) {
+
+				var notNullDays = {};
+				var blank = true;
+				for (var day in tasksByDay) {
+					if (tasksByDay[day].length > 0) {
+						notNullDays[day] = tasksByDay[day]
+						blank = false;
+					}
+				}
+
+				if (blank == true) {
+					alert("you have to add at least one task");
+				} else {
+					console.log(notNullDays);
+					var tasksJSON = JSON.stringify(notNullDays);
+
+					fetch('/weekly-tasks/save-tasks', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: tasksJSON,
+					})
+						.then(response => {
+							if (response.ok) {
+								console.log('Tasks saved successfuly');
+								window.location.href = '/weekly-tasks/current';
+							} else {
+								console.error('Error saving tasks')
+							}
+						})
+						.catch(error => {
+							console.error('Error: ', error);
+						})
+
+				}
+			}else{
+				console.log("correct")
+			}
+		}
+
+		function createWeek() {
+			document.getElementById('selectDays').style.display = 'block';
+			document.getElementById('selectDays').scrollIntoView({behavior: 'smooth'});
+		}
+	</script>
+</body>
+
+</html>
