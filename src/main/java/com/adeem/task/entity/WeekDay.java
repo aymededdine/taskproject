@@ -1,6 +1,7 @@
 package com.adeem.task.entity;
 
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -37,6 +38,14 @@ public class WeekDay {
 	
 	@ManyToOne
 	private WeekTable weekTable;
+	
+	public List<String> getNamesOfTasks(){
+		List<String> list = new ArrayList();
+		for (DayTask dayTask : dayTasks) {
+			list.add(dayTask.getName());
+		}
+		return list;
+	}
 	
 	
 

@@ -12,11 +12,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.adeem.task.config.DateConverter;
 import com.adeem.task.entity.Task;
 import com.adeem.task.service.TaskService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,26 +63,36 @@ public class TaskController {
     
     @PostMapping("/add")
 	public String insert(@ModelAttribute Task task) {
-//		if (errors.hasErrors()) {
-//	        return "redirect:/tasks";
-//			}
 		taskService.insert(task);
 		log.info("Task saved successfully");
         return "redirect:/tasks";
 	}
     
     
-    @PostMapping("/update")
-    public String update(Task task) {
-    	taskService.update(task);
-		log.info("Task updated successfully");
-        return "redirect:/tasks";
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody String name) throws JsonMappingException, JsonProcessingException {
+    	
+    	ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(name);
+        if (jsonNode.has("name")) {
+            String updatedName = jsonNode.get("name").asText();
+            return ResponseEntity.ok(taskService.update(id, updatedName));
+        }
+        return ResponseEntity.badRequest().body("Invalid JSON format");
+    }
+    
+    @PostMapping("/submit/{id}")
+    public ResponseEntity<?> submit(@PathVariable Long id){
+    	return taskService.submit(id);
+    }
+    
+    @PostMapping("/withdraw/{id}")
+    public ResponseEntity<?> withdraw(@PathVariable Long id){
+    	return taskService.withdraw(id);
     }
     
     @DeleteMapping("/delete/{id}")
-    public  ResponseEntity<?> delete(@PathVariable Long id) {
-    	//Long id = task.getId();
-    	
+    public  ResponseEntity<?> delete(@PathVariable Long id) {    	
     	return ResponseEntity.ok(taskService.deleteById(id));
     }
     

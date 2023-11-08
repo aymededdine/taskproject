@@ -4,16 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.adeem.task.entity.Task;
-import com.adeem.task.entity.TaskPriority;
-import com.adeem.task.entity.TaskStatus;
-import com.adeem.task.repository.PriorityRepository;
-import com.adeem.task.repository.StatusRepository;
 import com.adeem.task.repository.TaskRepository;
 
-import ch.qos.logback.core.util.StatusPrinter;
+
 
 @Service
 public class TaskService {
@@ -21,11 +19,8 @@ public class TaskService {
 	@Autowired
 	TaskRepository taskRepo;
 	
-	@Autowired
-	PriorityRepository priorityRepository;
-	
-	@Autowired
-	StatusRepository statusRepository;
+
+
 
 	public List<Task> listAll() {
 		return taskRepo.findAll();
@@ -40,24 +35,19 @@ public class TaskService {
 	}
 
 	public Task insert(Task task) {
-		var taskObject = task;
-		var x = priorityRepository.findById(task.getPriority().getId()).orElseThrow(() -> new IllegalArgumentException("Priority not found"));
-		var y = statusRepository.findById(task.getStatus().getId()).orElseThrow(() -> new IllegalArgumentException("Status not found"));
-		task.setPriority(x);
-		task.setStatus(y);
+		
+		task.setPriority(task.getPriority());
+		task.setStatus(task.getStatus());
 		
 		return taskRepo.save(task);
 	}
 
-	public Task update(Task task) {
+	public Task update(Long id, String name) {
 		// Use Optional's orElseThrow to provide a custom exception message.
-		Task current = taskRepo.findById(task.getId())
+		Task current = taskRepo.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Task not found"));
 
-		// Update the fields individually.
-		current.setName(task.getName());
-		current.setPriority(task.getPriority());
-		current.setStatus(task.getStatus());
+		current.setName(name);
 
 		return taskRepo.save(current);
 	}
@@ -69,5 +59,29 @@ public class TaskService {
 			return true;
 		}
 		return false;
+	}
+
+	public ResponseEntity<?> submit(Long id) {
+		
+		Task current = taskRepo.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Task not found"));
+
+		 current.setStatus(Task.Status.DONE);
+		 
+		 if(taskRepo.save(current) != null)
+			 return new ResponseEntity<>("Task submitted successfully", HttpStatus.OK);
+		 return new ResponseEntity<>("Error while submitting", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+public ResponseEntity<?> withdraw(Long id) {
+		
+		Task current = taskRepo.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Task not found"));
+
+		 current.setStatus(Task.Status.WITHDRAWN);
+		 
+		 if(taskRepo.save(current) != null)
+			 return new ResponseEntity<>("Task withdrawn successfully", HttpStatus.OK);
+		 return new ResponseEntity<>("Error while withdrawing", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

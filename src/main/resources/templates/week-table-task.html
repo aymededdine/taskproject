@@ -10,7 +10,7 @@
 			background-color: #fff;
 			border: 1px solid #ccc;
 			border-radius: 5px;
-			padding: 10px;
+			padding: 15px;
 			margin: 10px 0;
 		}
 
@@ -32,28 +32,48 @@
 			text-align: center;
 		}
 
-		.task-item button {
-			background-color: rgb(255, 0, 0);
+		#deleteButton {
+			background-color: rgb(255, 32, 32);
 			color: #fff;
 			border: none;
-			padding: 4px 4px;
-			border-radius: 50%;
+			padding: 6px 6px;
 			/* Make the button rounded */
 			cursor: pointer;
 			transition: background-color 0.3s;
 			font-size: 12px;
 		}
 
-		.task-item button:hover {
-			background-color: rgb(255, 128, 128);
+		#updateButton {
+			background-color: rgb(0, 128, 0);
+			color: #fff;
+			border: none;
+			padding: 6px 6px;
+			border-radius: 50%;
+			cursor: pointer;
+			transition: background-color 0.3s;
+			font-size: 12px;
+		}
+
+		#deleteButton:hover {
+			background-color: rgb(204, 0, 0);
+		}
+
+		#updateButton:hover {
+			background-color: rgb(0, 153, 0);
+		}
+
+		.hidden-span {
+			display: none;
 		}
 	</style>
+
 </head>
 
 <body>
 	<div th:replace="header :: header"></div>
 
-	<form id="selectDays" class="container mt-4">
+
+	<form id="selectDays" class="container mt-4" th:if="${weekTable.submitted == true}">
 		<fieldset>
 			<legend>Please add tasks to the days you'd like to schedule, avoiding your busy or break days</legend>
 			<div class="days-grid">
@@ -63,6 +83,19 @@
 					<div id="MONDAYTasks" class="mt-2"></div>
 					<button type="button" class="btn btn-success add-task-button" onclick="addTask('MONDAY')">Add
 						Task</button>
+					<br />
+					<br />
+					<span id="copyfromMONDAY" class="hidden-span">
+						<a href="javascript:void(0)" onclick="copyTo('MONDAY')">Copy tasks to</a>
+						<select id="MONDAYSelect">
+							<option value="TUESDAY">TUESDAY</option>
+							<option value="WEDNESDAY">WEDNESDAY</option>
+							<option value="THURSDAY">THURSDAY</option>
+							<option value="FRIDAY">FRIDAY</option>
+							<option value="SATURDAY">SATURDAY</option>
+							<option value="SUNDAY">SUNDAY</option>
+						</select>
+					</span>
 				</div>
 
 				<!-- Tuesday -->
@@ -71,7 +104,21 @@
 					<div id="TUESDAYTasks" class="mt-2"></div>
 					<button type="button" class="btn btn-success add-task-button" onclick="addTask('TUESDAY')">Add
 						Task</button>
+					<br />
+					<br />
+					<span id="copyfromTUESDAY" class="hidden-span">
+						<a href="javascript:void(0)" onclick="copyTo('TUESDAY')">Copy tasks to</a>
+						<select id="TUESDAYSelect">
+							<option value="MONDAY">MONDAY</option>
+							<option value="WEDNESDAY">WEDNESDAY</option>
+							<option value="THURSDAY">THURSDAY</option>
+							<option value="FRIDAY">FRIDAY</option>
+							<option value="SATURDAY">SATURDAY</option>
+							<option value="SUNDAY">SUNDAY</option>
+						</select>
+					</span>
 				</div>
+
 
 				<!-- Wednesday -->
 				<div class="day-card">
@@ -79,6 +126,19 @@
 					<div id="WEDNESDAYTasks" class="mt-2"></div>
 					<button type="button" class="btn btn-success add-task-button" onclick="addTask('WEDNESDAY')">Add
 						Task</button>
+					<br />
+					<br />
+					<span id="copyfromWEDNESDAY" class="hidden-span">
+						<a href="javascript:void(0)" onclick="copyTo('WEDNESDAY')">Copy tasks to</a>
+						<select id="WEDNESDAYSelect">
+							<option value="MONDAY">MONDAY</option>
+							<option value="TUESDAY">TUESDAY</option>
+							<option value="THURSDAY">THURSDAY</option>
+							<option value="FRIDAY">FRIDAY</option>
+							<option value="SATURDAY">SATURDAY</option>
+							<option value="SUNDAY">SUNDAY</option>
+						</select>
+					</span>
 				</div>
 
 				<!-- Thursday -->
@@ -87,6 +147,19 @@
 					<div id="THURSDAYTasks" class="mt-2"></div>
 					<button type="button" class="btn btn-success add-task-button" onclick="addTask('THURSDAY')">Add
 						Task</button>
+					<br />
+					<br />
+					<span id="copyfromTHURSDAY" class="hidden-span">
+						<a href="javascript:void(0)" onclick="copyTo('THURSDAY')">Copy tasks to</a>
+						<select id="THURSDAYSelect">
+							<option value="MONDAY">MONDAY</option>
+							<option value="TUESDAY">TUESDAY</option>
+							<option value="WEDNESDAY">WEDNESDAY</option>
+							<option value="FRIDAY">FRIDAY</option>
+							<option value="SATURDAY">SATURDAY</option>
+							<option value="SUNDAY">SUNDAY</option>
+						</select>
+					</span>
 				</div>
 
 				<!-- Friday -->
@@ -95,6 +168,19 @@
 					<div id="FRIDAYTasks" class="mt-2"></div>
 					<button type="button" class="btn btn-success add-task-button" onclick="addTask('FRIDAY')">Add
 						Task</button>
+					<br />
+					<br />
+					<span id="copyfromFRIDAY" class="hidden-span">
+						<a href="javascript:void(0)" onclick="copyTo('FRIDAY')">Copy tasks to</a>
+						<select id="FRIDAYSelect">
+							<option value="MONDAY">MONDAY</option>
+							<option value="TUESDAY">TUESDAY</option>
+							<option value="WEDNESDAY">WEDNESDAY</option>
+							<option value="THURSDAY">THURSDAY</option>
+							<option value="SATURDAY">SATURDAY</option>
+							<option value="SUNDAY">SUNDAY</option>
+						</select>
+					</span>
 				</div>
 
 				<!-- Saturday -->
@@ -103,6 +189,19 @@
 					<div id="SATURDAYTasks" class="mt-2"></div>
 					<button type="button" class="btn btn-success add-task-button" onclick="addTask('SATURDAY')">Add
 						Task</button>
+					<br />
+					<br />
+					<span id="copyfromSATURDAY" class="hidden-span">
+						<a href="javascript:void(0)" onclick="copyTo('SATURDAY')">Copy tasks to</a>
+						<select id="SATURDAYSelect">
+							<option value="MONDAY">MONDAY</option>
+							<option value="TUESDAY">TUESDAY</option>
+							<option value="WEDNESDAY">WEDNESDAY</option>
+							<option value="THURSDAY">THURSDAY</option>
+							<option value="FRIDAY">FRIDAY</option>
+							<option value="SUNDAY">SUNDAY</option>
+						</select>
+					</span>
 				</div>
 
 				<!-- Sunday -->
@@ -111,15 +210,62 @@
 					<div id="SUNDAYTasks" class="mt-2"></div>
 					<button type="button" class="btn btn-success add-task-button" onclick="addTask('SUNDAY')">Add
 						Task</button>
+					<br />
+					<br />
+					<span id="copyfromSUNDAY" class="hidden-span">
+						<a href="javascript:void(0)" onclick="copyTo('SUNDAY')">Copy tasks to</a>
+						<select id="SUNDAYSelect">
+							<option value="MONDAY">MONDAY</option>
+							<option value="TUESDAY">TUESDAY</option>
+							<option value="WEDNESDAY">WEDNESDAY</option>
+							<option value="THURSDAY">THURSDAY</option>
+							<option value="FRIDAY">FRIDAY</option>
+							<option value="SATURDAY">SATURDAY</option>
+						</select>
+					</span>
 				</div>
 			</div>
 		</fieldset>
 		<br />
 		<button type="button" class="btn btn-primary" th:onclick="saveTasks()">Submit</button>
+		<button type="button" class="btn btn-secondary" th:onclick="reloadPage()">reset</button>
 	</form>
 
-	<script>
-		// Create an object to store tasks for each day
+	<br />
+	<br />
+
+	<div class="container" th:if="${weekTable.submitted==false}">
+		<div class="row">
+			<div class="col-md-6 offset-md-3">
+				<div class="card text-center">
+					<div class="card-body">
+						<h1 class="card-title">Warning</h1>
+						<p class="card-text">You must complete your last weekly planner before creating a new one.
+						</p>
+						<p class="card-text">Completion can be achieved by either submitting or withdrawing tasks.</p>
+
+						<a th:href="@{/weekly-tasks/current}" class="btn btn-primary">Back to your current weekly
+							planner</a>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script th:inline="javascript">
+
+
+		function content() {
+			return "";
+		}
+
+
+
+		var springTasks = [[${map}]];
+
+
+
 		var tasksByDay = {
 			MONDAY: [],
 			TUESDAY: [],
@@ -130,14 +276,98 @@
 			SUNDAY: [],
 		};
 
+
+		if (springTasks != null) {
+			for (const key in springTasks) {
+				tasksByDay[key] = springTasks[key];
+			}
+			console.log(tasksByDay);
+			appendBased();
+		}
+
+		function copyTo(referencedDay) {
+
+			var selectElement = document.getElementById(referencedDay + "Select");
+			var selectedOption = selectElement.options[selectElement.selectedIndex];
+			var selectedDay = selectedOption.value;
+
+			console.log(selectedDay);
+
+			tasksByDay[selectedDay] = tasksByDay[referencedDay];
+
+			var dayTasksElement = document.getElementById(selectedDay + "Tasks");
+			dayTasksElement.innerHTML = "";
+
+			for (const task of tasksByDay[selectedDay]) {
+				let content = `
+          			 <div class="task-item" style="display: flex; justify-content: space-between; align-items: center;">
+    					<span>${task}</span>
+    					<button id="updateButton" style="margin-left: auto;" onclick="updateTask('${selectedDay}', '${task}')">Update</button>
+    					<button id="deleteButton" style="margin-left: 10px;" onclick="deleteTask('${selectedDay}', '${task}')">Delete</button>
+					</div>
+
+        `;
+				dayTasksElement.innerHTML += content;
+			}
+			attachDeleteButtonListeners(selectedDay);
+			var hiddenSpan = document.getElementById("copyfrom" + selectedDay);
+			hiddenSpan.style.display = "block";
+			updateTaskList();
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+		function appendBased() {
+
+
+			for (const key in tasksByDay) {
+
+				if (tasksByDay[key].length === 0) {continue;}
+
+				var dayTasksElement = document.getElementById(key + "Tasks");
+				dayTasksElement.innerHTML = "";
+
+				for (const task of tasksByDay[key]) {
+					let content = `
+          			 <div class="task-item" style="display: flex; justify-content: space-between; align-items: center;">
+    					<span>${task}</span>
+    					<button id="updateButton" style="margin-left: auto;" onclick="updateTask('${day}', '${task}')">Update</button>
+    					<button id="deleteButton" style="margin-left: 10px;" onclick="deleteTask('${day}', '${task}')">Delete</button>
+					</div>
+
+        `;
+					dayTasksElement.innerHTML += content;
+				}
+				attachDeleteButtonListeners(key);
+			}
+
+
+
+		}
+
+
+
 		function addTask(day) {
 			var taskName = prompt("Enter your task name:");
 
 			if (taskName) {
-				//var checkbox = document.getElementById(day);
-				//checkbox.checked = true;
 				if (!tasksByDay[day].includes(taskName)) {
 					tasksByDay[day].push(taskName);
+
+					var hiddenSpan = document.getElementById("copyfrom" + day);
+					hiddenSpan.style.display = "block";
+
+
+
 				} else {
 					alert("Task already exists");
 				}
@@ -148,12 +378,11 @@
 
 			for (const task of tasksByDay[day]) {
 				let content = `
-          			 <div class="task-item" style="display: flex; justify-content: space-between; align-items: center;">
+          			<div class="task-item" style="display: flex; justify-content: space-between; align-items: center;">
     					<span>${task}</span>
-    					<button onclick="deleteTask('${day}', '${task}')">Delete</button>
-					</div>
-
-        `;
+    					<button id="updateButton" style="margin-left: auto;" onclick="updateTask('${day}', '${task}')">Update</button>
+    					<button id="deleteButton" style="margin-left: 10px;" onclick="deleteTask('${day}', '${task}')">Delete</button>
+					</div>`;
 				dayTasksElement.innerHTML += content;
 			}
 
@@ -167,15 +396,37 @@
 			updateTaskList(day);
 		}
 
+		function updateTask(day, task) {
+			var updatedTask = prompt("Enter your new task name");
+
+			if (updatedTask) {
+				if (tasksByDay[day].includes(updatedTask)) {
+					alert("Task already exists");
+				} else {
+					var index = tasksByDay[day].indexOf(task);
+
+					if (index !== -1) {
+						tasksByDay[day][index] = updatedTask;
+						updateTaskList(day);
+					} else {
+						alert("Task not found");
+					}
+				}
+			}
+		}
+
+
+
 		function updateTaskList(day) {
 			var dayTasksElement = document.getElementById(day + "Tasks");
 			dayTasksElement.innerHTML = "";
 
 			for (const task of tasksByDay[day]) {
 				let content = `
-                    <div class="task-item">
+                    <div class="task-item" style="display: flex; justify-content: space-between; align-items: center;">
                         <span>${task}</span>
-                        <button onclick="deleteTask('${day}', '${task.id}')">Delete</button>
+                        <button id="updateButton" style="margin-left: auto;" onclick="updateTask('${day}', '${task}')">Update</button>
+                        <button id="deleteButton" style="margin-left: 10px;" onclick="deleteTask('${day}', '${task}')">Delete</button>
                     </div>
                 `;
 				dayTasksElement.innerHTML += content;
@@ -237,7 +488,7 @@
 						})
 
 				}
-			}else{
+			} else {
 				console.log("correct")
 			}
 		}
@@ -245,6 +496,10 @@
 		function createWeek() {
 			document.getElementById('selectDays').style.display = 'block';
 			document.getElementById('selectDays').scrollIntoView({behavior: 'smooth'});
+		}
+
+		function reloadPage() {
+			location.href = location.href;
 		}
 	</script>
 </body>

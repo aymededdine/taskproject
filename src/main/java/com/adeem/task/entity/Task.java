@@ -19,14 +19,17 @@ public class Task {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-	@ManyToOne
-	private TaskPriority priority;
-	@ManyToOne
-	private TaskStatus status;
+
+	private Priority priority;
 	
+	private Status status;
 
-	
+	public enum Status {
+		TO_DO, DONE, WITHDRAWN
+	}
 
-
+	public enum Priority {
+		HIGH, MEDIUM, LOW
+	}
 
 }

@@ -18,13 +18,15 @@ public class DayTask {
 	private Long id;
 	private String name;
 
-	@ManyToOne
-	private TaskStatus status;
+	@Column(name="status")
+	private Status status;
 
 	@ManyToOne
 	private WeekDay weekDay;
 	
-	@Column(name="active")
-	private boolean active = true;
+	
+	public enum Status { 
+		TO_DO, DONE, WITHDRAWN 
+	}
 
 }

@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,13 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.adeem.task.entity.DayTask;
 import com.adeem.task.entity.Task;
-import com.adeem.task.entity.TaskStatus;
 import com.adeem.task.entity.WeekDay;
 import com.adeem.task.entity.WeekTable;
-import com.adeem.task.repository.StatusRepository;
 import com.adeem.task.service.DayTaskService;
 import com.adeem.task.service.WeekDayService;
 import com.adeem.task.service.WeekTableService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,8 +41,7 @@ public class WeekTableController {
 	@Autowired 
 	DayTaskService dayTaskService;
 	
-	@Autowired
-	StatusRepository statusRepository;
+
 
 	@Autowired
 	public WeekTableController(WeekTableService weekTableService) {
@@ -78,7 +76,20 @@ public class WeekTableController {
 	}
 
 	@GetMapping("/create")
-	public String listWeekTables() {
+	public String listWeekTables(Model model) throws JsonProcessingException {
+		model.addAttribute("weekTable", weekTableService.findLast());
+
+		if(basedId == null) {
+		return "week-table-task"; }
+		
+		var map = weekTableService.weekTableToMap(basedId);
+		
+        ObjectMapper objectMapper = new ObjectMapper();
+        var jsonMap = objectMapper.writeValueAsString(map);
+		
+		model.addAttribute("map", map);
+		model.addAttribute("basedId", basedId);
+		basedId = null;
 		return "week-table-task";
 	}
 
@@ -113,8 +124,7 @@ public class WeekTableController {
 					System.out.println("Day: " + day + ", Task: " + task);
 					DayTask dayTask = new DayTask();
 					dayTask.setName(task);
-					TaskStatus todoStatus = statusRepository.findById(1L).orElseThrow(() -> new IllegalArgumentException("Status not found"));
-					dayTask.setStatus(todoStatus);
+					dayTask.setStatus(DayTask.Status.TO_DO);
 					dayTask.setWeekDay(weekDayInserted);
 					
 					dayTaskService.insert(dayTask);
@@ -126,6 +136,21 @@ public class WeekTableController {
 		}
 		return new ResponseEntity<>("Done Saving", HttpStatus.OK);
     	
+	}
+	
+	@PostMapping("/generate-like/{id}")
+	public ResponseEntity<?> generateLike(@PathVariable long id){
+
+		return new ResponseEntity<>(saveTasks(weekTableService.weekTableToMap(id)), HttpStatus.OK);
+	}
+	
+	Long basedId;
+	@PostMapping("/generate-based/{id}")
+	public ResponseEntity<?> generateBased(@PathVariable long id){
+		
+		this.basedId = id;
+
+		return new ResponseEntity<>("OK", HttpStatus.OK);
 	}
 	
 	@PostMapping("/submit/{id}")

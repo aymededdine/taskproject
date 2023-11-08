@@ -16,9 +16,7 @@ import com.adeem.task.entity.TaskPriority.Priority;
 
 import lombok.Data;
 
-@Data
-@Entity
-@Table(name = "status")
+
 public class TaskStatus {
 
 	

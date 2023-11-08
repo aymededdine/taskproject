@@ -6,12 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.adeem.task.entity.DayTask;
-import com.adeem.task.entity.Task;
 import com.adeem.task.entity.WeekDay;
-import com.adeem.task.repository.DayTaskRepository;
-import com.adeem.task.repository.PriorityRepository;
-import com.adeem.task.repository.StatusRepository;
 import com.adeem.task.repository.WeekDayRepository;
 
 @Service
@@ -20,11 +15,9 @@ public class WeekDayService {
 	@Autowired
 	WeekDayRepository weekDayRepository;
 	
-	@Autowired
-	PriorityRepository priorityRepository;
+
 	
-	@Autowired
-	StatusRepository statusRepository;
+
 
 	public List<WeekDay> listAll() {
 		return weekDayRepository.findAll();

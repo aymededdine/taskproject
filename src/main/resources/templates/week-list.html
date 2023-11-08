@@ -90,6 +90,28 @@
 			position: absolute;
 			right: 21.5%;
 		}
+
+
+
+		.btn-custom:hover {
+			background-color: rgb(185, 255, 185);
+		}
+
+		.center-container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			/* Adjust to your preference */
+		}
+
+		.horizontal-line {
+			width: 100%;
+			/* Adjust the width as needed */
+			height: 1px;
+			/* Adjust the height as needed */
+			background-color: #000;
+			/* Line color */
+		}
 	</style>
 </head>
 
@@ -118,17 +140,19 @@
 							<!-- Use Bootstrap list group for tasks -->
 							<ul class="list-group">
 								<li th:each="task : ${weekday.dayTasks}" class="list-group-item"
-									th:classappend="${task.active == false} ? inactive"></a>
+									th:classappend="${task.status.name() == 'WITHDRAWN'} ? inactive">
 									<span th:text="${task.name}"></span>
 									<div class="button-group">
-										<div th:if="${task.status.id == 1}" class="status-indicator gray"></div>
-										<div th:if="${task.status.id == 2}" class="status-indicator green"></div>
-										<div th:if="${task.active == false}" class="status-indicator red"></div>
+										<div th:if="${task.status.name() == 'TO_DO'}" class="status-indicator gray">
+										</div>
+										<div th:if="${task.status.name() == 'DONE'}" class="status-indicator green">
+										</div>
+										<div th:if="${task.status.name() == 'WITHDRAWN'}" class="status-indicator red"></div>
 										<button id="submitButton" type="button"
 											class="btn btn-success submit-button btn-sm rounded-circle"
-											th:classappend="${task.active == false or task.status.id == 2} ? 'disabled' : ''">Submit</button>
+											th:classappend="${task.status.name() == 'WITHDRAWN' or task.status.name() == 'DONE'} ? 'disabled' : ''">Submit</button>
 										<button id="withdrawButton" type="button" class="btn btn-danger withdraw-button"
-											th:classappend="${task.active == false or task.status.id == 2} ? 'disabled' : ''">Withdraw</button>
+											th:classappend="${task.status.name() == 'WITHDRAWN' or task.status.name() == 'DONE'} ? 'disabled' : ''">Withdraw</button>
 									</div>
 								</li>
 
@@ -137,11 +161,66 @@
 					</tr>
 
 				</tbody>
+				<div class="center-container">
+					<a class="btn btn-custom" th:onclick="generateLike([[${weekTable.getId()}]])">Create a new
+						weekly planner <b>like this</b></a>
+					<a class="btn btn-custom" th:onclick="generateBased([[${weekTable.getId()}]])">Create a new
+						weekly planner <b>based on this</b></a>
+				</div>
 			</table>
-		</div>
-		<div>
+			<br />
+			<br />
+			<br />
+			<div class="horizontal-line"></div>
 
 		</div>
+	</div>
+
+	<script>
+		function generateLike(id) {
+			fetch(`/weekly-tasks/generate-like/${id}`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({id: id}),
+			})
+				.then(response => {
+					if (response.ok) {
+						window.location.href = "/weekly-tasks/current";
+					} else {
+						return response.text().then(errorMessage => {
+							console.error('Error:', errorMessage);
+						});
+					}
+				})
+				.catch(error => {
+					console.error('Fetch error: ', error);
+				});
+		}
+
+		function generateBased(id) {
+			fetch(`/weekly-tasks/generate-based/${id}`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({id: id}),
+			})
+				.then(response => {
+					if (response.ok) {
+						window.location.href = "/weekly-tasks/create";
+					} else {
+						return response.text().then(errorMessage => {
+							console.error('Error:', errorMessage);
+						});
+					}
+				})
+				.catch(error => {
+					console.error('Fetch error: ', error);
+				});
+		}
+	</script>
 
 
 </body>

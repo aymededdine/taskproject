@@ -7,16 +7,15 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import com.adeem.task.entity.TaskStatus;
-import com.adeem.task.repository.StatusRepository;
 
 public class StatusConvertor implements Converter<Long, TaskStatus>  {
-	
-	@Autowired
-	private StatusRepository statusRepository;
 
 	@Override
-	public TaskStatus convert(Long status) {
-		return statusRepository.getById(status);
+	public TaskStatus convert(Long source) {
+		// TODO Auto-generated method stub
+		return null;
 	}
+	
+	
 
 }
