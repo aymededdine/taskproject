@@ -142,6 +142,9 @@ public class WeekTableController {
 
 	@PostMapping("/generate-like/{id}")
 	public ResponseEntity<?> generateLike(@PathVariable long id) {
+		
+		if(!weekTableService.findLast().isSubmitted())
+			return new ResponseEntity<>("The last Table is not done yet", HttpStatus.EXPECTATION_FAILED);
 
 		return new ResponseEntity<>(saveTasks(weekTableService.weekTableToMap(id)), HttpStatus.OK);
 	}

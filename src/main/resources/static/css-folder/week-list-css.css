@@ -1,0 +1,106 @@
+.custom-table {
+	max-width: 800px;
+	width: 100%;
+	margin: auto;
+}
+
+.days-column {
+	width: 20%;
+}
+
+.submit-button {
+	margin-right: 30px;
+	margin-left: 30px;
+}
+
+.withdraw-button {
+	margin-right: 30px;
+	padding: 2px 4px;
+}
+
+.button-group {
+	float: right;
+	margin-left: 10px;
+}
+
+.button-group button {
+	margin-top: 5px;
+}
+
+.status-indicator {
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	display: inline-block;
+	margin-left: 10px;
+}
+
+.gray {
+	background-color: rgb(221, 221, 221);
+}
+
+.green {
+	background-color: rgb(0, 215, 0);
+}
+
+.red {
+	background-color: rgb(234, 0, 0);
+}
+
+li.inactive {
+	color: #888;
+	background-color: rgb(225, 225, 225);
+}
+
+
+
+button {
+	padding: 5px 10px;
+	cursor: pointer;
+}
+
+button:disabled {
+	background-color: #ccc;
+	cursor: not-allowed;
+}
+
+.table-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100%;
+}
+
+#submitWeekButton {
+	align-self: flex-end;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 20px;
+	cursor: pointer;
+	position: absolute;
+	right: 21.5%;
+}
+
+
+
+.btn-custom:hover {
+	background-color: rgb(185, 255, 185);
+}
+
+.center-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	/* Adjust to your preference */
+}
+
+.horizontal-line {
+	width: 100%;
+	/* Adjust the width as needed */
+	height: 1px;
+	/* Adjust the height as needed */
+	background-color: #000;
+	/* Line color */
+}
