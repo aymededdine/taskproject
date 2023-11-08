@@ -34,14 +34,12 @@ import lombok.extern.slf4j.Slf4j;
 public class WeekTableController {
 
 	private final WeekTableService weekTableService;
-	
+
 	@Autowired
 	WeekDayService weekDayService;
-	
-	@Autowired 
-	DayTaskService dayTaskService;
-	
 
+	@Autowired
+	DayTaskService dayTaskService;
 
 	@Autowired
 	public WeekTableController(WeekTableService weekTableService) {
@@ -57,7 +55,7 @@ public class WeekTableController {
 	public Task task() {
 		return new Task();
 	}
-	
+
 	@GetMapping("")
 	public String listAll(Model model) {
 		model.addAttribute("weekTables", weekTableService.findAll());
@@ -77,16 +75,22 @@ public class WeekTableController {
 
 	@GetMapping("/create")
 	public String listWeekTables(Model model) throws JsonProcessingException {
-		model.addAttribute("weekTable", weekTableService.findLast());
+		if (weekTableService.findLast() == null) {
+			model.addAttribute("weekTable", new WeekTable());
+			model.addAttribute("tableIsNull", true);
+		} else {
+			model.addAttribute("weekTable", weekTableService.findLast());
+			model.addAttribute("tableIsNull", false); }
 
-		if(basedId == null) {
-		return "week-table-task"; }
-		
+		if (basedId == null) {
+			return "week-table-task";
+		}
+
 		var map = weekTableService.weekTableToMap(basedId);
-		
-        ObjectMapper objectMapper = new ObjectMapper();
-        var jsonMap = objectMapper.writeValueAsString(map);
-		
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		var jsonMap = objectMapper.writeValueAsString(map);
+
 		model.addAttribute("map", map);
 		model.addAttribute("basedId", basedId);
 		basedId = null;
@@ -95,6 +99,8 @@ public class WeekTableController {
 
 	@GetMapping("/current")
 	public String displayCurrentTable(Model model) {
+		if(weekTableService.findLast() == null)
+			return "no-week";
 		WeekTable weekTable = weekTableService.findLast();
 		model.addAttribute("weekTable", weekTableService.findLast());
 		return "last-table";
@@ -102,61 +108,57 @@ public class WeekTableController {
 
 	@PostMapping("/save-tasks")
 	public ResponseEntity<?> saveTasks(@RequestBody Map<String, List<String>> tasksByDay) {
-		
+
 		WeekTable weekTable = weekTableService.insert();
-		
 
 		for (Map.Entry<String, List<String>> entry : tasksByDay.entrySet()) {
 			String day = entry.getKey();
 			List<String> tasks = entry.getValue();
 
 			if (tasks != null) {
-				
+
 				WeekDay weekDay = new WeekDay();
 				DayOfWeek dayOfWeek = DayOfWeek.valueOf(day);
 				weekDay.setDayOfWeek(dayOfWeek);
 				weekDay.setWeekTable(weekTable);
-				
+
 				WeekDay weekDayInserted = weekDayService.insert(weekDay);
 
-				
 				for (String task : tasks) {
 					System.out.println("Day: " + day + ", Task: " + task);
 					DayTask dayTask = new DayTask();
 					dayTask.setName(task);
 					dayTask.setStatus(DayTask.Status.TO_DO);
 					dayTask.setWeekDay(weekDayInserted);
-					
+
 					dayTaskService.insert(dayTask);
 				}
-				
-				
-				
+
 			}
 		}
 		return new ResponseEntity<>("Done Saving", HttpStatus.OK);
-    	
+
 	}
-	
+
 	@PostMapping("/generate-like/{id}")
-	public ResponseEntity<?> generateLike(@PathVariable long id){
+	public ResponseEntity<?> generateLike(@PathVariable long id) {
 
 		return new ResponseEntity<>(saveTasks(weekTableService.weekTableToMap(id)), HttpStatus.OK);
 	}
-	
+
 	Long basedId;
+
 	@PostMapping("/generate-based/{id}")
-	public ResponseEntity<?> generateBased(@PathVariable long id){
-		
+	public ResponseEntity<?> generateBased(@PathVariable long id) {
+
 		this.basedId = id;
 
 		return new ResponseEntity<>("OK", HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/submit/{id}")
-	public ResponseEntity<?> submitWeek(@PathVariable Long id){
+	public ResponseEntity<?> submitWeek(@PathVariable Long id) {
 		return weekTableService.submitWeek(id);
 	}
-	
 
 }

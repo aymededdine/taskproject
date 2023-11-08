@@ -15,12 +15,11 @@
 <body>
 	<div th:replace="header :: header"></div>
 
-
 	<!-- Main Content -->
 	<main class="container">
 		<!-- Introduction Section -->
 		<section class="my-5">
-			<h1>Welcome to Task Manager</h1>
+			<h1>Welcome to Weekly Planner</h1>
 			<h5 style="color:rgb(128, 128, 128);">Organize your tasks effectively</h5>
 		</section>
 
@@ -29,7 +28,7 @@
 			<h2>Choose a Task Category:</h2>
 			<div class="row">
 
-				<!-- Weekly Task Managing Card -->
+				<!-- Weekly Task Managing Card (Emphasized) -->
 				<div class="col-md-6">
 					<div class="card h-100">
 						<div class="card-body d-flex flex-column justify-content-between">
@@ -39,7 +38,8 @@
 						</div>
 					</div>
 				</div>
-				<!-- Normal Task Managing Card -->
+
+				<!-- Normal Task Managing Card (Secondary) -->
 				<div class="col-md-6">
 					<div class="card h-100">
 						<div class="card-body d-flex flex-column justify-content-between">
@@ -64,8 +64,6 @@
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-
 </body>
 
 </html>

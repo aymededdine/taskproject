@@ -73,7 +73,7 @@
 	<div th:replace="header :: header"></div>
 
 
-	<form id="selectDays" class="container mt-4" th:if="${weekTable.submitted == true}">
+	<form id="selectDays" class="container mt-4" th:if="${weekTable.submitted == true or tableIsNull == true}">
 		<fieldset>
 			<legend>Please add tasks to the days you'd like to schedule, avoiding your busy or break days</legend>
 			<div class="days-grid">
@@ -234,7 +234,7 @@
 	<br />
 	<br />
 
-	<div class="container" th:if="${weekTable.submitted==false}">
+	<div class="container" th:if="${weekTable.submitted==false and tableIsNull == false}">
 		<div class="row">
 			<div class="col-md-6 offset-md-3">
 				<div class="card text-center">
