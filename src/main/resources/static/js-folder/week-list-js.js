@@ -1,8 +1,12 @@
+const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
 function generateLike(id) {
 	fetch(`/weekly-tasks/generate-like/${id}`, {
 		method: 'POST',
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			[csrfHeader]: csrfToken
 		},
 		body: JSON.stringify({ id: id }),
 	})
@@ -27,7 +31,8 @@ function generateBased(id) {
 	fetch(`/weekly-tasks/generate-based/${id}`, {
 		method: 'POST',
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			[csrfHeader]: csrfToken
 		},
 		body: JSON.stringify({ id: id }),
 	})

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.adeem.task.entity.DayTask;
-
+import com.adeem.task.entity.User;
 import com.adeem.task.repository.DayTaskRepository;
 
 
@@ -29,9 +29,10 @@ public class DayTaskService {
 	}
 
 
-	public DayTask insert(DayTask taskObject) {
+	public DayTask insert(DayTask taskObject, User user) {
 		var y = taskObject.getStatus();
 		taskObject.setStatus(y);
+		taskObject.setUser(user);
 		
 		return dayTaskRepo.save(taskObject);
 	}

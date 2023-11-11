@@ -1,3 +1,6 @@
+const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
 function submitTask(id) {
 
 	var result = window.confirm("Click OK to confirm submitting");
@@ -9,7 +12,8 @@ function submitTask(id) {
 		fetch(`/day-tasks/submit/${id}`, {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				[csrfHeader]: csrfToken
 			},
 			body: JSON.stringify({ id: id }), // Convert the object to a JSON string
 		})
@@ -42,7 +46,8 @@ function withdrawTask(id) {
 		fetch(`/day-tasks/withdraw/${id}`, {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				[csrfHeader]: csrfToken
 			},
 			body: JSON.stringify({ id: id }),
 		})
@@ -81,7 +86,8 @@ function submitWeek(id) {
 		fetch(`/weekly-tasks/submit/${id}`, {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				[csrfHeader]: csrfToken
 			},
 			body: JSON.stringify({ id: id }),
 		})

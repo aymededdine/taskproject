@@ -4,16 +4,19 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.adeem.task.entity.DayTask;
 import com.adeem.task.entity.DayTask.Status;
+import com.adeem.task.entity.User;
 import com.adeem.task.entity.WeekDay;
 
 
 public interface DayTaskRepository extends JpaRepository<DayTask, Long> {
 	
-	Long countByStatus(Status status);
+	long countByUser(User user);
+	
+	Long countByUserAndStatus(User user, Status status);
 	
 	
-	Double countByWeekDay(WeekDay weekDay);
+	Double countByUserAndWeekDay(User user, WeekDay weekDay);
 	
-	Double countByWeekDayAndStatus(WeekDay weekDay, Status status);
+	Double countByUserAndWeekDayAndStatus(User user, WeekDay weekDay, Status status);
 		
 }

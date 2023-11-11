@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.adeem.task.entity.DayTask;
+import com.adeem.task.entity.User;
 import com.adeem.task.entity.WeekDay;
 import com.adeem.task.repository.DayTaskRepository;
 import com.adeem.task.repository.TaskRepository;
@@ -33,60 +34,44 @@ public class StatisticsService {
 	Map<String, Double> numiricStatistics = new HashMap<>();
 	Map<String, SortedSet<Long>> statisticsOfOrder = new HashMap<>();
 
-	public void weeklyPlansStatistics() {
-
-		numiricStatistics.put("totalWeeks", totalWeeks());
-		numiricStatistics.put("taskCompletionRate", taskCompletionRate());
-		numiricStatistics.put("taskCompletionRateByWeek", null);
-		numiricStatistics.put("totalDays", totalDays());
-		numiricStatistics.put("restDays", null);
-		numiricStatistics.put("totalTasks", totalTasks());
-		numiricStatistics.put("submittedTasks", submittedTasks());
-		numiricStatistics.put("withdrawedTasks", withdrawnTasks());
-		numiricStatistics.put("averageTasksPerDay", 0.0);
-		numiricStatistics.put("averageTasksPerWeek", 0.0);
-
-		statisticsOfOrder.put("activeWeeks", null);
-		statisticsOfOrder.put("activeDays", null);
-
+	
+	
+	public Double totalTasks(User user) {
+		return (double) dayTaskRepository.countByUser(user);
 	}
 	
-	public Double totalTasks() {
-		return (double) dayTaskRepository.count();
+	public Double totalDays(User user) {
+		return (double) weekDayRepository.countByUser(user);
 	}
 	
-	public Double totalDays() {
-		return (double) weekDayRepository.count();
+	public Double averageTasksPerDay(User user) {
+		return totalTasks(user) / totalDays(user);
 	}
 	
-	public Double averageTasksPerDay() {
-		return totalTasks() / totalDays();
-	}
-	
-	public Double averageTasksPerWeek() {
-		return totalTasks() / totalWeeks();
+	public Double averageTasksPerWeek(User user) {
+		return totalTasks(user) / totalWeeks(user);
 	}
 
-	public Double totalWeeks() {
-		return (double) weekTableRepository.count();
+	public Double totalWeeks(User user) {
+		return (double) weekTableRepository.countByUser(user);
 	}
 
-	public Double submittedTasks() {
+	public Double submittedTasks(User user) {
 		
-		return (double) dayTaskRepository.countByStatus(DayTask.Status.DONE);
+		return (double) dayTaskRepository.countByUserAndStatus(user, DayTask.Status.DONE);
 
 	}
 	
-	public Double withdrawnTasks() {
+	public Double withdrawnTasks(User user) {
 		
-		return (double) dayTaskRepository.countByStatus(DayTask.Status.WITHDRAWN);
+		return (double) dayTaskRepository.countByUserAndStatus(user, DayTask.Status.WITHDRAWN);
 		
 	}
 
-	public Double taskCompletionRate() {
+	public Double taskCompletionRate(User user) {
 
-		var totalTasks = dayTaskRepository.count();
-		var doneTasks = dayTaskRepository.countByStatus(DayTask.Status.DONE);
+		var totalTasks = dayTaskRepository.countByUser(user);
+		var doneTasks = dayTaskRepository.countByUserAndStatus(user, DayTask.Status.DONE);
 		if (totalTasks == 0)
 			return 0.0;
 
@@ -94,7 +79,7 @@ public class StatisticsService {
 
 	}
 
-	public Double taskCompletionRateByWeek(long weekId) {
+	public Double taskCompletionRateByWeek(long weekId, User user) {
 
 
 		var numberOfTasksByWeek = 0;
@@ -103,8 +88,8 @@ public class StatisticsService {
 				weekTableRepository.findById(weekId).orElseThrow(() -> new IllegalArgumentException("Week not found")));
 
 		for (WeekDay weekDay : weekDays) {
-			numberOfTasksByWeek += dayTaskRepository.countByWeekDay(weekDay);
-			numberOfTaskscompletedByWeek += dayTaskRepository.countByWeekDayAndStatus(weekDay, DayTask.Status.DONE);
+			numberOfTasksByWeek += dayTaskRepository.countByUserAndWeekDay(user, weekDay);
+			numberOfTaskscompletedByWeek += dayTaskRepository.countByUserAndWeekDayAndStatus(user, weekDay, DayTask.Status.DONE);
 		}
 
 		if (numberOfTasksByWeek == 0)

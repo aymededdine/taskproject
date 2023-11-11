@@ -47,6 +47,9 @@ public class WeekDay {
 		return list;
 	}
 	
+	@ManyToOne
+	private User user;
+	
 	
 
 

@@ -1,3 +1,5 @@
+const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
 window.addEventListener('load', function() {
 	window.scrollTo(0, document.body.scrollHeight);
@@ -32,7 +34,8 @@ function submitTask(taskId) {
 	fetch(`/tasks/submit/${taskId}`, {
 		method: 'POST',
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			[csrfHeader]: csrfToken
 		},
 		body: JSON.stringify({ id: taskId })
 	})
@@ -53,7 +56,8 @@ function withdrawTask(taskId) {
 	fetch(`/tasks/withdraw/${taskId}`, {
 		method: 'POST',
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			[csrfHeader]: csrfToken
 		},
 		body: JSON.stringify({ id: taskId })
 	})
@@ -77,7 +81,8 @@ function updateTask(taskId) {
 	fetch(`/tasks/update/${taskId}`, {
 		method: 'PUT',
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			[csrfHeader]: csrfToken
 		},
 		body: JSON.stringify({ name: updatedName })
 	})

@@ -34,11 +34,16 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		 return http
 				 .authorizeRequests()
-				 .antMatchers("/weekly-tasks", "/tasks", "/statistics", "/weekly-tasks/create", "/weekly-tasks/current").access("hasRole('USER')")
+				 .antMatchers("/weekly-tasks/**", "/tasks", "/statistics").access("hasRole('USER')")
 				 .antMatchers("/", "/**").access("permitAll()")
 				 .and()
 				 .formLogin()
 				 .loginPage("/login")
+				 .and()
+				 .oauth2Login()
+				 .loginPage("/login")
+				 .and()
+				 .logout()
 				 .and()
 				 .build();
 	}

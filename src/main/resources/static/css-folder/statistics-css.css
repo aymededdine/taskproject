@@ -1,9 +1,6 @@
-/* Add your custom CSS here */
 body {
 	background-color: #f7f7f7;
 }
-
-
 
 h1 {
 	text-align: center;
@@ -35,9 +32,9 @@ h3 {
 	font-size: 1rem;
 }
 
-.container {
+.statistics-container {
 	position: absolute;
-	top: 50%;
+	top: 60%;
 	left: 50%;
 	transform: translate(-50%, -50%)
 }

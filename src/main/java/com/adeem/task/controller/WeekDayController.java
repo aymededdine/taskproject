@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.adeem.task.config.DateConverter;
 import com.adeem.task.entity.DayTask;
 import com.adeem.task.entity.Task;
+import com.adeem.task.entity.User;
 import com.adeem.task.entity.WeekDay;
 import com.adeem.task.service.DayTaskService;
 import com.adeem.task.service.WeekDayService;
@@ -56,11 +58,11 @@ public class WeekDayController {
     
     
     @PostMapping("/add")
-	public String insert(@ModelAttribute WeekDay task) {
+	public String insert(@ModelAttribute WeekDay task, @AuthenticationPrincipal User user) {
 //		if (errors.hasErrors()) {
 //	        return "redirect:/tasks";
 //			}
-    	weekDayService.insert(task);
+    	weekDayService.insert(task, user);
 		log.info("Task saved successfully");
         return "redirect:/tasks";
 	}

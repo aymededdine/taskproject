@@ -1,6 +1,5 @@
 package com.adeem.task.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.adeem.task.entity.DayTask;
+import com.adeem.task.entity.User;
 import com.adeem.task.entity.WeekDay;
 import com.adeem.task.entity.WeekTable;
 import com.adeem.task.repository.WeekDayRepository;
@@ -30,8 +30,9 @@ public class WeekTableService {
 	}
 
 	// Create a new WeekTable
-	public WeekTable insert() {
+	public WeekTable insert(User user) {
 		WeekTable weekTable = new WeekTable();
+		weekTable.setUser(user);
 		return weekTableRepository.save(weekTable);
 	}
 
@@ -45,12 +46,12 @@ public class WeekTableService {
 	}
 
 	// Retrieve all WeekTables
-	public List<WeekTable> findAll() {
-		return weekTableRepository.findAll();
+	public List<WeekTable> findAll(User user) {
+		return weekTableRepository.findAllByUser(user);
 	}
 
-	public WeekTable findLast() {
-		return weekTableRepository.findFirstByOrderByIdDesc();
+	public WeekTable findLast(User user) {
+		return weekTableRepository.findFirstByUserOrderByIdDesc(user);
 	}
 
 	// Update an existing WeekTable

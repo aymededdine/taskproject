@@ -24,9 +24,13 @@ public class DayTask {
 	@ManyToOne
 	private WeekDay weekDay;
 	
+	@ManyToOne
+	private User user;
+	
 	
 	public enum Status { 
 		TO_DO, DONE, WITHDRAWN 
 	}
+	
 
 }

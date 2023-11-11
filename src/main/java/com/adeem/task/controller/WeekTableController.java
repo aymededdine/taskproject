@@ -1,5 +1,6 @@
 package com.adeem.task.controller;
 
+import java.security.Principal;
 import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.adeem.task.entity.DayTask;
 import com.adeem.task.entity.Task;
+import com.adeem.task.entity.User;
 import com.adeem.task.entity.WeekDay;
 import com.adeem.task.entity.WeekTable;
+import com.adeem.task.repository.UserRepository;
 import com.adeem.task.service.DayTaskService;
 import com.adeem.task.service.WeekDayService;
 import com.adeem.task.service.WeekTableService;
@@ -40,6 +44,9 @@ public class WeekTableController {
 
 	@Autowired
 	DayTaskService dayTaskService;
+	
+	@Autowired
+	UserRepository userRepository;
 
 	@Autowired
 	public WeekTableController(WeekTableService weekTableService) {
@@ -57,8 +64,8 @@ public class WeekTableController {
 	}
 
 	@GetMapping("")
-	public String listAll(Model model) {
-		model.addAttribute("weekTables", weekTableService.findAll());
+	public String listAll(Model model, @AuthenticationPrincipal User user) {
+		model.addAttribute("weekTables", weekTableService.findAll(user));
 		return "week-list";
 	}
 
@@ -69,18 +76,20 @@ public class WeekTableController {
 	}
 
 	@PostMapping("/insert")
-	public ResponseEntity<?> insert() {
-		return ResponseEntity.ok(weekTableService.insert());
+	public ResponseEntity<?> insert(Principal principal) {
+		User user = userRepository.findByUsername(principal.getName());
+		return ResponseEntity.ok(weekTableService.insert(user));
 	}
 
 	@GetMapping("/create")
-	public String listWeekTables(Model model) throws JsonProcessingException {
-		if (weekTableService.findLast() == null) {
+	public String listWeekTables(Model model, @AuthenticationPrincipal User user) throws JsonProcessingException {
+		if (weekTableService.findLast(user) == null) {
 			model.addAttribute("weekTable", new WeekTable());
 			model.addAttribute("tableIsNull", true);
 		} else {
-			model.addAttribute("weekTable", weekTableService.findLast());
-			model.addAttribute("tableIsNull", false); }
+			model.addAttribute("weekTable", weekTableService.findLast(user));
+			model.addAttribute("tableIsNull", false);
+		}
 
 		if (basedId == null) {
 			return "week-table-task";
@@ -98,18 +107,22 @@ public class WeekTableController {
 	}
 
 	@GetMapping("/current")
-	public String displayCurrentTable(Model model) {
-		if(weekTableService.findLast() == null)
+	public String displayCurrentTable(Model model, @AuthenticationPrincipal User user) {
+		
+		
+		if (weekTableService.findLast(user) == null)
 			return "no-week";
-		WeekTable weekTable = weekTableService.findLast();
-		model.addAttribute("weekTable", weekTableService.findLast());
+		WeekTable weekTable = weekTableService.findLast(user);
+		model.addAttribute("weekTable", weekTableService.findLast(user));
 		return "last-table";
 	}
 
 	@PostMapping("/save-tasks")
-	public ResponseEntity<?> saveTasks(@RequestBody Map<String, List<String>> tasksByDay) {
+	public ResponseEntity<?> saveTasks(@RequestBody Map<String, List<String>> tasksByDay, @AuthenticationPrincipal User user) {
 
-		WeekTable weekTable = weekTableService.insert();
+		
+
+		WeekTable weekTable = weekTableService.insert(user);
 
 		for (Map.Entry<String, List<String>> entry : tasksByDay.entrySet()) {
 			String day = entry.getKey();
@@ -122,7 +135,7 @@ public class WeekTableController {
 				weekDay.setDayOfWeek(dayOfWeek);
 				weekDay.setWeekTable(weekTable);
 
-				WeekDay weekDayInserted = weekDayService.insert(weekDay);
+				WeekDay weekDayInserted = weekDayService.insert(weekDay, user);
 
 				for (String task : tasks) {
 					System.out.println("Day: " + day + ", Task: " + task);
@@ -131,7 +144,7 @@ public class WeekTableController {
 					dayTask.setStatus(DayTask.Status.TO_DO);
 					dayTask.setWeekDay(weekDayInserted);
 
-					dayTaskService.insert(dayTask);
+					dayTaskService.insert(dayTask, user);
 				}
 
 			}
@@ -141,12 +154,14 @@ public class WeekTableController {
 	}
 
 	@PostMapping("/generate-like/{id}")
-	public ResponseEntity<?> generateLike(@PathVariable long id) {
+	public ResponseEntity<?> generateLike(@PathVariable long id, @AuthenticationPrincipal User user) {
 		
-		if(!weekTableService.findLast().isSubmitted())
+
+
+		if (!weekTableService.findLast(user).isSubmitted())
 			return new ResponseEntity<>("The last Table is not done yet", HttpStatus.EXPECTATION_FAILED);
 
-		return new ResponseEntity<>(saveTasks(weekTableService.weekTableToMap(id)), HttpStatus.OK);
+		return new ResponseEntity<>(saveTasks(weekTableService.weekTableToMap(id), user), HttpStatus.OK);
 	}
 
 	Long basedId;

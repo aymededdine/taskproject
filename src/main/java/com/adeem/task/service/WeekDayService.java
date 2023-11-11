@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
+import com.adeem.task.entity.User;
 import com.adeem.task.entity.WeekDay;
 import com.adeem.task.repository.WeekDayRepository;
 
@@ -28,7 +30,8 @@ public class WeekDayService {
 	}
 
 
-	public WeekDay insert(WeekDay weekDay) {
+	public WeekDay insert(WeekDay weekDay, User user) {
+		weekDay.setUser(user);
 		return weekDayRepository.save(weekDay);
 	}
 
