@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.adeem.task.config.DateConverter;
 import com.adeem.task.entity.Task;
+import com.adeem.task.entity.User;
 import com.adeem.task.service.TaskService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -40,8 +42,8 @@ public class TaskController {
     private DateConverter dateConverter;
 
     @GetMapping
-    public String listAllTasks(Model model) {
-        List<Task> tasks = taskService.listAll();
+    public String listAllTasks(Model model, @AuthenticationPrincipal User user) {
+        List<Task>tasks = taskService.listAll(user);
         
         model.addAttribute("tasks", tasks);
         return "task-list"; 
@@ -62,8 +64,8 @@ public class TaskController {
     
     
     @PostMapping("/add")
-	public String insert(@ModelAttribute Task task) {
-		taskService.insert(task);
+	public String insert(@ModelAttribute Task task, @AuthenticationPrincipal User user) {
+		taskService.insert(task, user);
 		log.info("Task saved successfully");
         return "redirect:/tasks";
 	}

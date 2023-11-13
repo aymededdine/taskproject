@@ -10,8 +10,8 @@
 </head>
 
 <body>
-	
-	<div th:replace="header :: header"></div>
+
+	<div th:replace="fragments :: main-header"></div>
 
 	<div class="container statistics-container">
 		<h1>Statistics</h1>
@@ -97,22 +97,10 @@
 			</div>
 		</div>
 
+		<div th:replace="fragments :: main-footer"></div>
 
-		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-		<script>
-		// You can fetch and update the statistics dynamically here using JavaScript
-		// Replace the 'Loading...' text with the actual values
-		//document.getElementById("totalTasks").textContent = "Replace with actual value";
-		//document.getElementById("totalDays").textContent = "Replace with actual value";
-		//document.getElementById("averageTasksPerDay").textContent = "Replace with actual value";
-		//document.getElementById("averageTasksPerWeek").textContent = "Replace with actual value";
-		//document.getElementById("totalWeeks").textContent = "Replace with actual value";
-		//document.getElementById("submittedTasks").textContent = "Replace with actual value";
-		//document.getElementById("withdrawnTasks").textContent = "Replace with actual value";
-		//document.getElementById("taskCompletionRate").textContent = "Replace with actual value";
-		</script>
+
+
 </body>
 
 </html>

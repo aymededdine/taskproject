@@ -12,7 +12,7 @@
 </head>
 
 <body>
-	<div th:replace="header :: header"></div>
+	<div th:replace="fragments :: main-header"></div>
 	<div class="container mt-4 table-container">
 		<h1 class="display-5">Task List</h1>
 		<a class="btn btn-secondary" th:href="@{/tasks/task-form}">Add Task</a>
@@ -65,7 +65,11 @@
 		<!-- Your form content -->
 	</div>
 	<div id="overlay" class="dark-overlay"></div>
-	
+
+
+	<div th:replace="fragments :: main-footer"></div>
+
+
 	<script type="text/javascript" th:src="@{/js-folder/task-list-js.js}"></script>
 
 </body>

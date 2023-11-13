@@ -3,7 +3,10 @@ package com.adeem.task.entity;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,22 +22,46 @@ import lombok.RequiredArgsConstructor;
 
 @Entity
 @Data
-@NoArgsConstructor(access=AccessLevel.PRIVATE, force=true)
-@RequiredArgsConstructor
-public class User implements UserDetails{
-	
-	 @Id
-	 @GeneratedValue(strategy=GenerationType.AUTO)
-	 private Long id;
+public class User implements UserDetails {
 
-	 private final String username;
-	 private final String password;
-	 private final String email;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public User(String username, String password, String email, Provider provider) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.provider = provider;
+	}
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 	
-	
+	@Column(name="username")
+	private String username;
+	private String password;
+	private String email;
+
+	@Column(name="provider")
+	@Enumerated(EnumType.STRING)
+	private Provider provider;
+
+	public enum Provider {
+		LOCAL, FACEBOOK
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		 return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+		return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
 	}
 
 	@Override
@@ -72,7 +99,5 @@ public class User implements UserDetails{
 		// TODO Auto-generated method stub
 		return true;
 	}
-	
-	
 
 }

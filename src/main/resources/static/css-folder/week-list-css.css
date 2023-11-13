@@ -4,6 +4,7 @@
 	margin: auto;
 }
 
+
 .days-column {
 	width: 20%;
 }
@@ -93,14 +94,38 @@ button:disabled {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	/* Adjust to your preference */
 }
 
 .horizontal-line {
 	width: 100%;
-	/* Adjust the width as needed */
 	height: 1px;
-	/* Adjust the height as needed */
 	background-color: #000;
-	/* Line color */
+}
+
+/* Add this CSS for spacing */
+.list-container {
+	margin-top: 20px;
+	/* Adjust the top margin as needed */
+}
+
+li.submitted {
+	background-color: rgb(196, 255, 225);
+}
+
+.table-container {
+	margin-bottom: 30px;
+	/* Adjust the bottom margin as needed */
+}
+
+.center-container {
+	margin-top: 20px;
+	/* Adjust the top margin as needed */
+	margin-bottom: 20px;
+	/* Adjust the bottom margin as needed */
+}
+
+/* Optionally, you can add spacing to the button group */
+.button-group {
+	margin-top: 10px;
+	/* Adjust the top margin as needed */
 }

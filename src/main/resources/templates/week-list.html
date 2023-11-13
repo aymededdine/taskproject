@@ -12,16 +12,18 @@
 </head>
 
 <body>
-	<div th:replace="header :: header"></div>
+		<div th:replace="fragments :: main-header"></div>
+	
+	
 
-	<div class="container">
+	<div class="container list-container">
 
 
 
 		<div th:each="weekTable : ${weekTables}" class="table-container">
 
 			<table class="table table-bordered custom-table mt-4" th:if="${weekTable.submitted==true}">
-				<legend th:text="${weekTable.getId()}" class="mt-4"></legend>
+				
 
 				<thead>
 					<tr>
@@ -36,7 +38,7 @@
 							<!-- Use Bootstrap list group for tasks -->
 							<ul class="list-group">
 								<li th:each="task : ${weekday.dayTasks}" class="list-group-item"
-									th:classappend="${task.status.name() == 'WITHDRAWN'} ? inactive">
+									th:classappend="${task.status.name() == 'WITHDRAWN' ? 'inactive' : (task.status.name() == 'DONE' ? 'submitted' : '')}">
 									<span th:text="${task.name}"></span>
 									<div class="button-group">
 										<div th:if="${task.status.name() == 'TO_DO'}" class="status-indicator gray">
@@ -68,10 +70,12 @@
 			<br />
 			<br />
 			<br />
-			<div class="horizontal-line"></div>
+			
 
 		</div>
 	</div>
+	
+	<div th:replace="fragments :: main-footer"></div>
 
 	<script type="text/javascript" th:src="@{/js-folder/week-list-js.js}"></script>
 

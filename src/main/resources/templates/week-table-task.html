@@ -14,7 +14,7 @@
 </head>
 
 <body>
-	<div th:replace="header :: header"></div>
+		<div th:replace="fragments :: main-header"></div>
 
 
 	<form id="selectDays" class="container mt-4" th:if="${weekTable.submitted == true or tableIsNull == true}">
@@ -196,6 +196,9 @@
 			</div>
 		</div>
 	</div>
+	
+		<div th:replace="fragments :: main-footer"></div>
+
 
 	<script th:inline="javascript">
 

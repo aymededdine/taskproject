@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.adeem.task.entity.Task;
+import com.adeem.task.entity.User;
 import com.adeem.task.repository.TaskRepository;
 
 
@@ -22,8 +23,8 @@ public class TaskService {
 
 
 
-	public List<Task> listAll() {
-		return taskRepo.findAll();
+	public List<Task> listAll(User user) {
+		return taskRepo.findAllByUser(user);
 	}
 
 	public Optional<Task> findById(Long id) {
@@ -34,8 +35,9 @@ public class TaskService {
 		return taskRepo.findByName(name);
 	}
 
-	public Task insert(Task task) {
+	public Task insert(Task task, User user) {
 		
+		task.setUser(user);
 		task.setPriority(task.getPriority());
 		task.setStatus(task.getStatus());
 		
