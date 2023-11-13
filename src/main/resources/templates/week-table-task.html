@@ -14,7 +14,7 @@
 </head>
 
 <body>
-		<div th:replace="fragments :: main-header"></div>
+	<div th:replace="fragments :: main-header"></div>
 
 
 	<form id="selectDays" class="container mt-4" th:if="${weekTable.submitted == true or tableIsNull == true}">
@@ -184,7 +184,8 @@
 				<div class="card text-center">
 					<div class="card-body">
 						<h1 class="card-title">Warning</h1>
-						<p class="card-text">You must complete your last weekly planner before creating a new one.
+						<p class="card-text"> <b>You have to complete your last weekly planner before creating a new
+								one.</b>
 						</p>
 						<p class="card-text">Completion can be achieved by either submitting or withdrawing tasks.</p>
 
@@ -196,9 +197,9 @@
 			</div>
 		</div>
 	</div>
-	
-		<div th:replace="fragments :: main-footer"></div>
 
+	<!--		<div th:replace="fragments :: main-footer"></div>
+-->
 
 	<script th:inline="javascript">
 
@@ -396,7 +397,7 @@
 
 		const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
 		const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-		
+
 		function saveTasks() {
 
 			var result = window.confirm("Make sure that you are certain to complete these tasks. Every task you write will be recorded in the statistics and cannot be deleted");

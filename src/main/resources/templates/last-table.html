@@ -8,16 +8,12 @@
 	<link th:href="@{/css-folder/last-table-css.css}" rel="stylesheet" />
 	<meta name="_csrf" th:content="${_csrf.token}" />
 	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
-
 </head>
 
 <body>
 	<div th:replace="fragments :: main-header"></div>
 
-	<div class="container table-container">
-
-
-
+	<div class="container">
 		<div class="table-container">
 			<table class="table table-bordered custom-table mt-4">
 				<thead>
@@ -33,47 +29,47 @@
 							<!-- Use Bootstrap list group for tasks -->
 							<ul class="list-group">
 								<li th:each="task : ${weekday.dayTasks}" class="list-group-item"
-									th:classappend="${task.status.name() == 'WITHDRAWN' ? 'inactive' : (task.status.name() == 'DONE' ? 'submitted' : '')}">
+									th:classappend="${task.status?.name() == 'WITHDRAWN' ? 'inactive' : (task.status?.name() == 'DONE' ? 'submitted' : '')}">
 									<span th:text="${task.name}"></span>
 									<div class="button-group">
-										<div th:if="${task.status.name() == 'TO_DO'}" class="status-indicator gray">
+										<div th:if="${task.status?.name() == 'TO_DO'}" class="status-indicator gray">
 										</div>
-										<div th:if="${task.status.name() == 'DONE'}" class="status-indicator green">
+										<div th:if="${task.status?.name() == 'DONE'}" class="status-indicator green">
 										</div>
-										<div th:if="${task.status.name() == 'WITHDRAWN'}" class="status-indicator red">
+										<div th:if="${task.status?.name() == 'WITHDRAWN'}" class="status-indicator red">
 										</div>
 										<button id="submitButton" type="button"
 											class="btn btn-success submit-button btn-sm rounded-circle"
 											th:onclick="submitTask([[${task.getId()}]])"
-											th:classappend="${task.status.name() == 'WITHDRAWN' or task.status.name() == 'DONE'} ? 'disabled' : ''">Submit</button>
+											th:classappend="${task.status?.name() == 'WITHDRAWN' or task.status?.name() == 'DONE'} ? 'disabled' : ''">Submit</button>
 										<button id="withdrawButton" type="button" class="btn btn-danger withdraw-button"
 											th:onclick="withdrawTask([[${task.getId()}]])"
-											th:classappend="${task.status.name() == 'WITHDRAWN' or task.status.name() == 'DONE'} ? 'disabled' : ''">Withdraw</button>
+											th:classappend="${task.status?.name() == 'WITHDRAWN' or task.status?.name() == 'DONE'} ? 'disabled' : ''">Withdraw</button>
 									</div>
 								</li>
-
 							</ul>
 						</td>
 					</tr>
-
 				</tbody>
 			</table>
+
+
 		</div>
+
 		<div>
 			<br />
 			<button id="submitWeekButton" type="button" class="btn btn-success submit-button btn-sm"
 				th:onclick="submitWeek([[${weekTable.getId()}]])" th:href="@{/congratulations}"
-				th:classappend="${weekTable.submitted == true} ? 'disabled' : ''">Submit Week</button>
-
-
-
+				th:classappend="${weekTable.submitted == true} ? 'disabled' : ''">Submit Week
+			</button>
 		</div>
+	</div>
 
-		<div th:replace="fragments :: main-footer"></div>
 
 
-		<script type="text/javascript" th:src="@{/js-folder/last-table-js.js}"></script>
-
+<!--	<div th:replace="fragments :: main-footer"></div>
+-->
+	<script type="text/javascript" th:src="@{/js-folder/last-table-js.js}"></script>
 </body>
 
 </html>

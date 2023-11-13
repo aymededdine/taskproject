@@ -1,9 +1,23 @@
+html,
+body {
+	overflow: auto;
+}
+
+html,
+body {
+	min-height: 100%;
+}
+
+body {
+	height: 100vh;
+}
+
 .table-container {
 	width: 40%;
 }
 
 .actions-column {
-	width: 41%;
+	width: 45%;
 }
 
 .status-column {
