@@ -21,7 +21,7 @@
 				</button>
 
 				<div class="collapse navbar-collapse" id="navbarNav">
-					<ul class="navbar-nav ml-auto">
+					<ul class="navbar-nav ml-auto" id="ulHeader">
 						<li class="nav-item"><a class="nav-link" th:href="@{/weekly-tasks/current}">My Current Weekly
 								Planner</a>
 						</li>
@@ -29,7 +29,9 @@
 						</li>
 						<li class="nav-item"><a class="nav-link" th:href="@{/statistics}">Statistics</a></li>
 						<li class="nav-item"><a class="nav-link" th:href="@{/tasks}">Normal Tasks</a></li>
-						<li class="nav-item"><a class="nav-link" th:href="@{/logout-form}">Logout</a></li>
+						<li id="logout" class="nav-item"><a class="nav-link"
+								th:href="@{/logout-form}">Logout</a></li>
+						
 					</ul>
 				</div>
 			</nav>
@@ -58,7 +60,10 @@
 			</div>
 		</div>
 	</footer>
+
 	
-	</body>
+
+
+</body>
 
 </html>

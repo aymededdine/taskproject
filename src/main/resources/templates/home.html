@@ -99,6 +99,31 @@
 
 	<!--	<div th:replace="fragments :: main-footer"></div>
 -->
+
+
+	<script>
+		function loginLogoutAppearance() {
+
+			var logout = document.getElementById("logout");
+			var login = document.getElementById("ulHeader");
+
+			content = '<li id="login" class="nav-item"><a class="nav-link" href="/login">Login</a></li>'
+
+			fetch('/is-auth')
+				.then(response => {
+					if (response.status == 417) {
+						logout.style.display = 'none'; // Hide logout
+						login.innerHTML += content; // Add login link
+					}
+				})
+				.catch(error => {
+					console.error('Error checking authentication:', error);
+				});
+		}
+
+		loginLogoutAppearance();
+	</script>
+
 </body>
 
 </html>
