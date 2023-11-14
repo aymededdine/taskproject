@@ -9,3 +9,7 @@
 	opacity: 1;
 	height: auto;
 }
+
+.btn:hover{
+	color: rgb(217, 108, 0);
+}
