@@ -65,6 +65,8 @@ public class WeekTableController {
 
 	@GetMapping("")
 	public String listAll(Model model, @AuthenticationPrincipal User user) {
+		if (weekTableService.findLast(user) == null)
+			return "no-week";
 		model.addAttribute("weekTables", weekTableService.findAll(user));
 		return "week-list";
 	}
