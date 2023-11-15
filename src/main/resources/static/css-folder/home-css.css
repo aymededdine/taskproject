@@ -10,6 +10,37 @@
 	height: auto;
 }
 
-.btn:hover{
+.btn:hover {
 	color: rgb(217, 108, 0);
 }
+
+/* Mobile-first approach */
+@media (max-width: 767px) {
+	.navbar-collapse {
+		background-color: #fff;
+		/* Example: Change background color for mobile view */
+		position: absolute;
+		/* Ensure menu items stack vertically */
+		top: 56px;
+		/* Adjust top position according to your header height */
+		left: 0;
+		right: 0;
+		z-index: 1000;
+		/* Ensure it appears above other elements */
+	}
+
+	.navbar-nav {
+		width: 100%;
+		/* Take up full width */
+		text-align: center;
+		/* Center-align menu items */
+		padding-top: 10px;
+		/* Adjust top padding */
+	}
+
+	.navbar-nav .nav-item {
+		display: block;
+		/* Display menu items as blocks */
+		margin-bottom: 5px;
+		/* Add some space between menu items */
+	}
