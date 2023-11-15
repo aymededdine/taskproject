@@ -28,19 +28,76 @@
 		z-index: 1000;
 		/* Ensure it appears above other elements */
 	}
+}
 
-	.navbar-nav {
-		width: 100%;
-		/* Take up full width */
-		text-align: center;
-		/* Center-align menu items */
-		padding-top: 10px;
-		/* Adjust top padding */
-	}
+.navbar-nav {
+	width: 100%;
+	/* Take up full width */
+	text-align: center;
+	/* Center-align menu items */
+	padding-top: 10px;
+	/* Adjust top padding */
+}
 
-	.navbar-nav .nav-item {
-		display: block;
-		/* Display menu items as blocks */
-		margin-bottom: 5px;
-		/* Add some space between menu items */
-	}
+.navbar-nav .nav-item {
+	display: block;
+	/* Display menu items as blocks */
+	margin-bottom: 5px;
+	/* Add some space between menu items */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.popup-card {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(to bottom right, #ff94b6, #ff6680);
+  color: #fff;
+  text-align: center;
+  display: none;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.popup-card p {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.popup-card button {
+  padding: 12px 30px;
+  font-size: 18px;
+  border-radius: 25px;
+  background-color: #fff;
+  color: #ff6680;
+  border: 2px solid #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.popup-card button:hover {
+  background-color: #ff6680;
+  color: #fff;
+}

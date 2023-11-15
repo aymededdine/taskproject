@@ -12,6 +12,7 @@
 
 
 
+
 </head>
 
 <body style="margin: 0; padding: 0; height: 100%; width: 100%;">
@@ -19,6 +20,12 @@
 
 
 	<div th:replace="fragments :: main-header"></div>
+
+	<div id="popupMessage" class="popup-card">
+		<p>I cherish every moment with you, my dearest Amouna!</p>
+		<p>Your presence fills my world with joy and love.</p>
+		<button onclick="hidePopupMessage()">You mean everything to me, my beloved Imed</button>
+	</div>
 
 
 	<!-- Main Content -->
@@ -83,6 +90,8 @@
 
 
 
+
+
 				<!-- Normal Task Managing Card (Secondary) -->
 				<!--<div class="col-md-6">
 					<div class="card w-100">
@@ -105,6 +114,31 @@
 
 
 	<script>
+
+		function showPopupMessage() {
+			var popup = document.getElementById('popupMessage');
+			popup.style.display = 'block'; // Display the popup
+		}
+
+		function hidePopupMessage() {
+			var popup = document.getElementById('popupMessage');
+			popup.style.display = 'none'; // Hide the popup
+		}
+
+		function isAmouna() {
+			fetch('/qwerty')
+				.then(response => {
+					if (response.status == 401) {
+						console.log("i love you");
+						showPopupMessage();
+					} 
+				})
+				.catch(error => {
+					console.error('Error:', error);
+				});
+		}
+
+
 		function loginLogoutAppearance() {
 
 			var logout = document.getElementById("logout");
@@ -126,8 +160,9 @@
 		}
 
 		loginLogoutAppearance();
+		isAmouna();
 	</script>
-	
+
 
 
 </body>

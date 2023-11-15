@@ -26,5 +26,14 @@ public class HomeController {
 		return new ResponseEntity<>("isAuth", HttpStatus.EXPECTATION_FAILED);
 
 	}
+	
+	@GetMapping("/qwerty")
+	public ResponseEntity<?> isAmouna(@AuthenticationPrincipal User user){
+	    if (user != null && user.getUsername().equals("boubidiimen")) {
+	        return new ResponseEntity<>("isAmouna", HttpStatus.UNAUTHORIZED);
+	    }
+	    return new ResponseEntity<>("Not Authorized", HttpStatus.OK);
+	}
+
 
 }
